@@ -6,10 +6,6 @@ class ToDoItem{
     title:string;
     dueDate:Date;
     isCompleted:boolean;
-
-    constructor(title:string){
-        this.title = title;
-    }
 }
 /*
 let item = new ToDoItem("testing");
@@ -17,6 +13,17 @@ item.dueDate = new Date(2020, 6, 1);
 item.isCompleted = false; 
 */
 
+window.onload = function(){
+    let addItem = $("add");
+    addItem.onclick = main;
+}
+
+function main(){
+    if(isValid()){
+        let item = getToDoItem();
+        displayToDoItem(item);
+    }
+}
 /**
  * Check form data is valid
  */
@@ -29,7 +36,10 @@ function isValid():boolean{
  * a ToDoItem object
  */
 function getToDoItem():ToDoItem{
-    let item = new ToDoItem("testing");
+    let item = new ToDoItem;
+    item.title = (<HTMLInputElement>$("title")).value;
+    item.dueDate = new Date((<HTMLInputElement>$("due-date")).value);
+    item.isCompleted = (<HTMLInputElement>$("is-complete")).checked;
     return item;
 }
 
@@ -38,6 +48,10 @@ function getToDoItem():ToDoItem{
  */
 function displayToDoItem(item:ToDoItem):void{
 
+}
+
+function $(id:string){
+    return document.getElementById(id);
 }
 
 // Task: allow user to mark
