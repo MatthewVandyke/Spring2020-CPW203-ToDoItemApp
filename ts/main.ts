@@ -47,7 +47,26 @@ function getToDoItem():ToDoItem{
  * Diplay given ToDoItem on the web page
  */
 function displayToDoItem(item:ToDoItem):void{
+    let itemText = document.createElement("h3");
+    itemText.innerText = item.title;
 
+    let itemDate = document.createElement("p");
+    itemDate.innerText = item.dueDate.toDateString();
+
+    let itemDiv = document.createElement("div");
+    if(item.isCompleted){
+        itemDiv.classList.add("completed");
+    }
+
+    itemDiv.appendChild(itemText);
+    itemDiv.appendChild(itemDate);
+
+    if(item.isCompleted){
+        $("complete-items").appendChild(itemDiv);
+    }
+    else{
+        $("incomplete-items").appendChild(itemDiv);
+    }
 }
 
 function $(id:string){
