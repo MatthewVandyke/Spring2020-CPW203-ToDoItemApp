@@ -8,11 +8,14 @@ var ToDoItem = (function () {
 window.onload = function () {
     var addItem = $("add");
     addItem.onclick = main;
-    loadSavedItem();
+    loadSavedItems();
 };
-function loadSavedItem() {
-    var item = getToDo();
-    displayToDoItem(item);
+function loadSavedItems() {
+    var items = getToDoItems();
+    for (var i = 0; i < items.length; i++) {
+        var currItem = items[i];
+        displayToDoItem(currItem);
+    }
 }
 function main() {
     if (isValid()) {
@@ -56,19 +59,40 @@ function markAsComplete() {
     var itemDiv = this;
     console.log(itemDiv);
     itemDiv.classList.add("completed");
+    var itemSearchKey = itemDiv.firstElementChild.innerHTML;
+    var items = getToDoItems();
+    var itemIndex = searchItemsArray(items, itemSearchKey);
+    items[itemIndex].isCompleted = true;
+    updateItemsArray(items);
     var completedItems = $("complete-items");
-    console.log(completedItems);
     completedItems.appendChild(itemDiv);
+}
+function searchItemsArray(items, itemSearchKey) {
+    var itemIndex;
+    for (var i = 0; i < items.length; i++) {
+        if (items[i].title == itemSearchKey) {
+            itemIndex = i;
+        }
+    }
+    return itemIndex;
 }
 function $(id) {
     return document.getElementById(id);
 }
 function saveToDo(item) {
-    var itemString = JSON.stringify(item);
-    localStorage.setItem(todokey, itemString);
+    var currItems = getToDoItems();
+    if (currItems == null) {
+        currItems = new Array();
+    }
+    currItems.push(item);
+    updateItemsArray(currItems);
 }
 var todokey = "todo";
-function getToDo() {
+function updateItemsArray(toDoItems) {
+    var itemsString = JSON.stringify(toDoItems);
+    localStorage.setItem(todokey, itemsString);
+}
+function getToDoItems() {
     var itemString = localStorage.getItem(todokey);
     var item = JSON.parse(itemString);
     return item;
