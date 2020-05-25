@@ -118,6 +118,7 @@ function saveToDo(item) {
         currItems = new Array();
     }
     currItems.push(item);
+    currItems.sort(compare);
     updateItemsArray(currItems);
 }
 var todokey = "todo";
@@ -129,4 +130,16 @@ function getToDoItems() {
     var itemString = localStorage.getItem(todokey);
     var item = JSON.parse(itemString);
     return item;
+}
+function compare(a, b) {
+    var dateA = new Date(a.dueDate.toString()).toJSON();
+    var dateB = new Date(b.dueDate.toString()).toJSON();
+    var comparison = 0;
+    if (dateA > dateB) {
+        comparison = 1;
+    }
+    else if (dateA < dateB) {
+        comparison = -1;
+    }
+    return comparison;
 }

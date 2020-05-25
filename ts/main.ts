@@ -173,6 +173,7 @@ function saveToDo(item:ToDoItem):void{
         currItems = new Array();
     }
     currItems.push(item);
+    currItems.sort(compare);
     updateItemsArray(currItems);
 }
 
@@ -191,4 +192,19 @@ function getToDoItems():ToDoItem[]{
     let itemString = localStorage.getItem(todokey);
     let item:ToDoItem[] = JSON.parse(itemString);
     return item;
+}
+
+function compare(a:ToDoItem, b:ToDoItem) {
+    // Probably a terrible workaround but it makes it work
+    let dateA:String = new Date(a.dueDate.toString()).toJSON();
+    let dateB:String = new Date(b.dueDate.toString()).toJSON();
+
+
+    let comparison = 0;
+    if (dateA > dateB){
+        comparison = 1;
+    } else if (dateA < dateB) {
+        comparison = -1
+    }
+    return comparison;
 }
