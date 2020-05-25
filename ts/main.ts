@@ -21,6 +21,9 @@ window.onload = function(){
     loadSavedItems();
 }
 
+/**
+ * Clears all elements inside of ToDoItem Div
+ */
 function clearItems():void{
     let items = document.querySelectorAll("div#all-items > div > div");
     for (let i = 0; i < items.length; i++){
@@ -28,6 +31,9 @@ function clearItems():void{
     }
 }
 
+/**
+ * Loads all items saved in web storage and puts them on the page
+ */
 function loadSavedItems(){
     clearItems();
     let items = getToDoItems();
@@ -38,6 +44,9 @@ function loadSavedItems(){
     }
 }
 
+/**
+ * Method for onclick event for add ToDoItem button
+ */
 function main(){
     let item = getToDoItem();
     if(isValid(item)){      
@@ -133,9 +142,11 @@ function removeToDoItemByTitle(title:string):void{
     itemDiv.remove();
 }
 
-function markAsComplete(){
+/**
+ * onclick for each item div to mark as complete
+ */
+function markAsComplete():void{
     let itemDiv = <HTMLDivElement>this;
-    console.log(itemDiv);
     itemDiv.classList.add("completed");
 
     // Update local storage
@@ -169,12 +180,18 @@ function searchItemsArray(items: ToDoItem[], itemSearchKey: string) {
     return itemIndex;
 }
 
+/**
+ * document.getElementById replacement
+ * @param id css id selector
+ */
 function $(id:string){
     return document.getElementById(id);
 }
 
-// Task: Store ToDoItems in web storage
-
+/**
+ * Saves ToDoItem in web storage
+ * @param item ToDoItem
+ */
 function saveToDo(item:ToDoItem):void{   
     let currItems = getToDoItems();
     if(currItems == null){
@@ -187,6 +204,10 @@ function saveToDo(item:ToDoItem):void{
 
 const todokey = "todo";
 
+/**
+ * Stringifys and saves ToDoItem array in web storage
+ * @param toDoItems ToDoItem array to save in webstorage
+ */
 function updateItemsArray(toDoItems: ToDoItem[]) {
     let itemsString = JSON.stringify(toDoItems);
     localStorage.setItem(todokey, itemsString);
@@ -202,11 +223,15 @@ function getToDoItems():ToDoItem[]{
     return item;
 }
 
+/**
+ * Compare function to use for sorting array of ToDo Items
+ * @param a ToDoItem  
+ * @param b ToDoItem
+ */
 function compare(a:ToDoItem, b:ToDoItem) {
     // Probably a terrible workaround but it makes it work
     let dateA:String = new Date(a.dueDate.toString()).toJSON();
     let dateB:String = new Date(b.dueDate.toString()).toJSON();
-
 
     let comparison = 0;
     if (dateA > dateB){

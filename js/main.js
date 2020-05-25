@@ -92,7 +92,6 @@ function removeToDoItemByTitle(title) {
 }
 function markAsComplete() {
     var itemDiv = this;
-    console.log(itemDiv);
     itemDiv.classList.add("completed");
     var itemSearchKey = itemDiv.firstElementChild.innerHTML;
     var items = getToDoItems();
