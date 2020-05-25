@@ -10,7 +10,14 @@ window.onload = function () {
     addItem.onclick = main;
     loadSavedItems();
 };
+function clearItems() {
+    var items = document.querySelectorAll("div#all-items > div > div");
+    for (var i = 0; i < items.length; i++) {
+        items[i].remove();
+    }
+}
 function loadSavedItems() {
+    clearItems();
     var items = getToDoItems();
     for (var i = 0; i < items.length; i++) {
         var currItem = items[i];
@@ -20,8 +27,8 @@ function loadSavedItems() {
 function main() {
     var item = getToDoItem();
     if (isValid(item)) {
-        displayToDoItem(item);
         saveToDo(item);
+        loadSavedItems();
     }
 }
 function isValid(item) {

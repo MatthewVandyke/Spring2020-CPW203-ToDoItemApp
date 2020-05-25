@@ -21,7 +21,15 @@ window.onload = function(){
     loadSavedItems();
 }
 
+function clearItems():void{
+    let items = document.querySelectorAll("div#all-items > div > div");
+    for (let i = 0; i < items.length; i++){
+        items[i].remove();
+    }
+}
+
 function loadSavedItems(){
+    clearItems();
     let items = getToDoItems();
 
     for(let i = 0; i < items.length; i++){
@@ -33,8 +41,8 @@ function loadSavedItems(){
 function main(){
     let item = getToDoItem();
     if(isValid(item)){      
-        displayToDoItem(item);
         saveToDo(item);
+        loadSavedItems();
     }
 }
 
