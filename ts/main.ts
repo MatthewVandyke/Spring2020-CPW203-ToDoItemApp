@@ -31,8 +31,8 @@ function loadSavedItems(){
 }
 
 function main(){
-    if(isValid()){
-        let item = getToDoItem();
+    let item = getToDoItem();
+    if(isValid(item)){      
         displayToDoItem(item);
         saveToDo(item);
     }
@@ -41,7 +41,26 @@ function main(){
 /**
  * Check form data is valid
  */
-function isValid():boolean{
+function isValid(item: ToDoItem):boolean{
+    // Validate title
+    let title = item.title;
+    if(title.trim() == "" || title == null){
+        return false;
+    }
+
+    let items = getToDoItems();
+    let titleIndex = searchItemsArray(items, title);
+    if (titleIndex != -1){
+        let overwrite = confirm("Do you wish to overwrite old ToDoItem?");
+        if(overwrite){
+            items.splice(titleIndex, 1);
+            removeToDoItemByTitle(title);
+            updateItemsArray(items);
+        }
+        else{
+            return false;
+        }
+    }
     return true;
 }
 
@@ -89,6 +108,23 @@ function displayToDoItem(item:ToDoItem):void{
     }
 }
 
+/**
+ * Searchs for title in all ToDoItem divs and removes it
+ * @param title Title to search for
+ */
+function removeToDoItemByTitle(title:string):void{
+    let itemDivs = document.querySelectorAll("div#all-items > div > div");
+    let itemDiv:HTMLDivElement;
+
+    for (let i = 0; i < itemDivs.length; i++){
+        if(itemDivs[i].firstElementChild.innerHTML == title){
+            itemDiv = <HTMLDivElement>itemDivs[i];
+            break;
+        }
+    }
+    itemDiv.remove();
+}
+
 function markAsComplete(){
     let itemDiv = <HTMLDivElement>this;
     console.log(itemDiv);
@@ -98,16 +134,25 @@ function markAsComplete(){
     let itemSearchKey = itemDiv.firstElementChild.innerHTML;
     let items = getToDoItems();
     let itemIndex = searchItemsArray(items, itemSearchKey);
-    items[itemIndex].isCompleted = true;
-
-    updateItemsArray(items);
+    if (itemIndex != -1){
+        items[itemIndex].isCompleted = true;
+        updateItemsArray(items);
+    }
 
     let completedItems = $("complete-items");
     completedItems.appendChild(itemDiv);
 }
 
+/**
+ * Returns index of ToDoItem with matching title,
+ * if array is null or title does not exist returns
+ * -1
+ * @param items array of ToDoItems
+ * @param itemSearchKey title to search for
+ */
 function searchItemsArray(items: ToDoItem[], itemSearchKey: string) {
-    let itemIndex;
+    let itemIndex = -1;
+    if(items == null) {return itemIndex;}
     for (let i = 0; i < items.length; i++) {
         if (items[i].title == itemSearchKey) {
             itemIndex = i;

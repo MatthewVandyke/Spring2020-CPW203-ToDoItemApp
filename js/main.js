@@ -18,13 +18,30 @@ function loadSavedItems() {
     }
 }
 function main() {
-    if (isValid()) {
-        var item = getToDoItem();
+    var item = getToDoItem();
+    if (isValid(item)) {
         displayToDoItem(item);
         saveToDo(item);
     }
 }
-function isValid() {
+function isValid(item) {
+    var title = item.title;
+    if (title.trim() == "" || title == null) {
+        return false;
+    }
+    var items = getToDoItems();
+    var titleIndex = searchItemsArray(items, title);
+    if (titleIndex != -1) {
+        var overwrite = confirm("Do you wish to overwrite old ToDoItem?");
+        if (overwrite) {
+            items.splice(titleIndex, 1);
+            removeToDoItemByTitle(title);
+            updateItemsArray(items);
+        }
+        else {
+            return false;
+        }
+    }
     return true;
 }
 function getToDoItem() {
@@ -55,6 +72,17 @@ function displayToDoItem(item) {
         $("incomplete-items").appendChild(itemDiv);
     }
 }
+function removeToDoItemByTitle(title) {
+    var itemDivs = document.querySelectorAll("div#all-items > div > div");
+    var itemDiv;
+    for (var i = 0; i < itemDivs.length; i++) {
+        if (itemDivs[i].firstElementChild.innerHTML == title) {
+            itemDiv = itemDivs[i];
+            break;
+        }
+    }
+    itemDiv.remove();
+}
 function markAsComplete() {
     var itemDiv = this;
     console.log(itemDiv);
@@ -62,13 +90,18 @@ function markAsComplete() {
     var itemSearchKey = itemDiv.firstElementChild.innerHTML;
     var items = getToDoItems();
     var itemIndex = searchItemsArray(items, itemSearchKey);
-    items[itemIndex].isCompleted = true;
-    updateItemsArray(items);
+    if (itemIndex != -1) {
+        items[itemIndex].isCompleted = true;
+        updateItemsArray(items);
+    }
     var completedItems = $("complete-items");
     completedItems.appendChild(itemDiv);
 }
 function searchItemsArray(items, itemSearchKey) {
-    var itemIndex;
+    var itemIndex = -1;
+    if (items == null) {
+        return itemIndex;
+    }
     for (var i = 0; i < items.length; i++) {
         if (items[i].title == itemSearchKey) {
             itemIndex = i;
