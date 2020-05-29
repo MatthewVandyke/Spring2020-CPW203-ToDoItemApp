@@ -8,6 +8,8 @@ var ToDoItem = (function () {
 window.onload = function () {
     var addItem = $("add");
     addItem.onclick = main;
+    var dateBox = $("due-date");
+    dateBox.value = new Date().toDateString();
     loadSavedItems();
 };
 function clearItems() {
@@ -34,6 +36,9 @@ function main() {
 function isValid(item) {
     var title = item.title;
     if (title.trim() == "" || title == null) {
+        return false;
+    }
+    if (item.dueDate == null) {
         return false;
     }
     var items = getToDoItems();
@@ -92,6 +97,8 @@ function removeToDoItemByTitle(title) {
 }
 function markAsComplete() {
     var itemDiv = this;
+    if (itemDiv.classList.contains("completed"))
+        return;
     itemDiv.classList.add("completed");
     var itemSearchKey = itemDiv.firstElementChild.innerHTML;
     var items = getToDoItems();

@@ -17,6 +17,9 @@ window.onload = function(){
     let addItem = $("add");
     addItem.onclick = main;
 
+    let dateBox:HTMLInputElement = <HTMLInputElement>$("due-date");
+    dateBox.value = new Date().toDateString();
+
     // Load saved item
     loadSavedItems();
 }
@@ -62,6 +65,10 @@ function isValid(item: ToDoItem):boolean{
     // Validate title
     let title = item.title;
     if(title.trim() == "" || title == null){
+        return false;
+    }
+
+    if (item.dueDate == null){
         return false;
     }
 
@@ -147,6 +154,8 @@ function removeToDoItemByTitle(title:string):void{
  */
 function markAsComplete():void{
     let itemDiv = <HTMLDivElement>this;
+    if (itemDiv.classList.contains("completed"))
+        return;
     itemDiv.classList.add("completed");
 
     // Update local storage
