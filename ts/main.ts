@@ -78,7 +78,7 @@ function isValid(item: ToDoItem):boolean{
         let overwrite = confirm("Do you wish to overwrite old ToDoItem?");
         if(overwrite){
             items.splice(titleIndex, 1);
-            removeToDoItemByTitle(title);
+            //removeToDoItemByTitle(title);
             updateItemsArray(items);
         }
         else{
@@ -135,6 +135,8 @@ function displayToDoItem(item:ToDoItem):void{
 /**
  * Searchs for title in all ToDoItem divs and removes it
  * @param title Title to search for
+ * @deprecated unecessary but I left it in to show how I used to do it
+ *  
  */
 function removeToDoItemByTitle(title:string):void{
     let itemDivs = document.querySelectorAll("div#all-items > div > div");

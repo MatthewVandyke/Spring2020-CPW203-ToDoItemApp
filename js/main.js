@@ -47,7 +47,6 @@ function isValid(item) {
         var overwrite = confirm("Do you wish to overwrite old ToDoItem?");
         if (overwrite) {
             items.splice(titleIndex, 1);
-            removeToDoItemByTitle(title);
             updateItemsArray(items);
         }
         else {
